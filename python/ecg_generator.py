@@ -13,12 +13,6 @@ def ecg_generator(dt=1e-4, t_end=1):
     #H, a1, a2, a3, a4, Gt = (2.178, 0.1, -0.02, -0.01, 0, 13) # ventricular flutter
 
     for i in range(len(t)):
-        # x1.append(Gt*(x1[i]-x2[i]-C*x1[i]*x2[i]-x1[i]*x2[i]**2)*dt+x1[i])
-        # x2.append(Gt*(H*x1[i]-3*x2[i]+C*x1[i]*x2[i]+x1[i]*x2[i]**2+b*(x4[i]-x2[i]))*dt+x2[i])
-        # x3.append(Gt*(x3[i]-x4[i]-C*x3[i]*x4[i]-x3[i]*x4[i]**2)*dt+x3[i])
-        # x4.append(Gt*(H*x3[i]-3*x4[i]+C*x3[i]*x4[i]+x3[i]*x4[i]**2+2*b*(x2[i]-x4[i]))*dt+x4[i])
-        # ecg.append(a1*x1[i+1]+a2*x2[i+1]+a3*x3[i+1]+a4*x4[i+1])
-
         x1.append(Gt*(x1[-1]-x2[-1]-C*x1[-1]*x2[-1]-x1[-1]*x2[-1]**2)*dt+x1[-1])
         x2.append(Gt*(H*x1[-1]-3*x2[-1]+C*x1[-1]*x2[-1]+x1[-1]*x2[-1]**2+b*(x4[-1]-x2[-1]))*dt+x2[-1])
         x3.append(Gt*(x3[-1]-x4[-1]-C*x3[-1]*x4[-1]-x3[-1]*x4[-1]**2)*dt+x3[-1])
