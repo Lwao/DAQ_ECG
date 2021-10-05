@@ -92,8 +92,8 @@ gpio_config_t in_conf = {
     .pull_up_en   = 0,                   // disable pull-up mode
 };
 
-float inBuffer[BUFFER_LEN];
-float outBuffer[BUFFER_LEN];
+char inBuffer[BUFFER_LEN];
+char outBuffer[BUFFER_LEN];
 
 // configuration
 float prev_x[4] = {0,0,0.1,0}; // previous x vector
@@ -104,6 +104,8 @@ float dt=1e-4; // sampling period
 const float C=1.35, beta=4;
 float alpha[4] = {-0.024, 0.0216, -0.0012, 0.12};
 float H=3, gammat=7;
+float ecg;
+const float min_=-1, max_=1;
 
 // freertos variables
 TaskHandle_t xTaskGENhandle; // handle to ECG generation task

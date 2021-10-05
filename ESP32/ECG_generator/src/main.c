@@ -25,7 +25,7 @@ void app_main(void)
     ESP_ERROR_CHECK(gpio_isr_handler_add(BTN_CHANGE_PATHOLOGY, ISR_BTN, NULL));  // hook isr handler for specific gpio pin
 
     // create queue/semaphores/event groups
-    xQueueData        = xQueueCreate(NUM_BUFFERS,BUFFER_LEN*sizeof(float)); // 32 bits = 4 bytes
+    xQueueData        = xQueueCreate(NUM_BUFFERS,BUFFER_LEN*sizeof(char)); 
     xEvents           = xEventGroupCreate();
     xPathologies      = xEventGroupCreate();
     
@@ -76,11 +76,15 @@ void vTaskGenerateECG(void * pvParameters)
                 act_x[1] = gammat*(H*prev_x[0]-3*prev_x[1]+C*prev_x[0]*prev_x[1]+prev_x[0]*prev_x[1]*prev_x[1]+beta*(prev_x[3]-prev_x[1]))*dt+prev_x[1];
                 act_x[2] = gammat*(prev_x[2]-prev_x[3]-C*prev_x[2]*prev_x[3]-prev_x[2]*prev_x[3]*prev_x[3])*dt+prev_x[2];
                 act_x[3] = gammat*(H*prev_x[2]-3*prev_x[3]+C*prev_x[2]*prev_x[3]+prev_x[2]*prev_x[3]*prev_x[3]+2*beta*(prev_x[1]-prev_x[3]))*dt+prev_x[3];
-                inBuffer[i] = alpha[0]*act_x[0]+alpha[1]*act_x[1]+alpha[2]*act_x[2]+alpha[3]*act_x[3];
+                ecg = alpha[0]*act_x[0]+alpha[1]*act_x[1]+alpha[2]*act_x[2]+alpha[3]*act_x[3];
                 prev_x[0] = act_x[0];
                 prev_x[1] = act_x[1];
                 prev_x[2] = act_x[2];
                 prev_x[3] = act_x[3];
+                // convert float between [-0.6,0.6] to char between [0,255]
+                if(ecg>max_){ecg=max_;}
+                if(ecg<=min_){ecg=min_;}
+                inBuffer[i] = (char) ((ecg+abs(min_))*255/(max_+abs(min_)));
             }
 
             // enqueue ecg data buffer
@@ -102,7 +106,7 @@ void vTaskOutputECG(void * pvParameters)
             for(i=0; i<BUFFER_LEN; i++)
             {
                 time = esp_timer_get_time();
-                printf("%f\n", outBuffer[i]);
+                printf("%d\n", outBuffer[i]);
                 while((esp_timer_get_time()-time) < (int32_t)(1e6*dt));
             }
             vTaskDelay(1);
