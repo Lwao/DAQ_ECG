@@ -93,13 +93,17 @@ void vTaskGenerateECG(void * pvParameters)
 void vTaskOutputECG(void * pvParameters)
 {
     int i;
+    int32_t time;
     while(1)
     {
         while(xQueueData!=NULL && xQueueReceive(xQueueData, &outBuffer, portMAX_DELAY)==pdTRUE) // wait for data to be read
         {
+            
             for(i=0; i<BUFFER_LEN; i++)
             {
+                time = esp_timer_get_time();
                 printf("%f\n", outBuffer[i]);
+                while((esp_timer_get_time()-time) < (int32_t)(1e6*dt));
             }
             vTaskDelay(1);
         }
