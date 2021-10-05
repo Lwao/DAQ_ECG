@@ -1,7 +1,7 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (MiKTeX 21.7) (preloaded format=pdflatex 2021.8.3)  4 OCT 2021 16:30
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (MiKTeX 21.7) (preloaded format=pdflatex 2021.8.3)  5 OCT 2021 14:00
 entering extended mode
-**c:/Users/levyg/Downloads/DAQ_ECG/main.tex
-(c:/Users/levyg/Downloads/DAQ_ECG/main.tex
+**c:/Users/levyg/Documents/MEGA/Repositories/DAQ_ECG/latex/main.tex
+(c:/Users/levyg/Documents/MEGA/Repositories/DAQ_ECG/latex/main.tex
 LaTeX2e <2021-06-01> patch level 1
 L3 programming layer <2021-07-12> (C:\Users\levyg\AppData\Local\Programs\MiKTeX\tex/latex/base\article.cls
 Document Class: article 2021/02/12 v1.4n Standard LaTeX document class
@@ -291,17 +291,17 @@ File: uni-0.def 2013/05/13 UCS: Unicode data U+0000..U+00FF
 
  [4])) (text/body.tex (text/body/introducion.tex) [5] (text/body/methodology.tex) [6] (text/body/results.tex) [7] (text/body/discussions.tex) [8] (text/body/conclusions.tex) [9]) (text/pos.tex (text/pos/appendix.tex) [10]) (main.aux) ) 
 Here is how much of TeX's memory you used:
- 7670 strings out of 478870
- 126142 string characters out of 2848837
+ 7673 strings out of 478870
+ 126802 string characters out of 2848837
  529581 words of memory out of 3000000
- 25461 multiletter control sequences out of 15000+600000
- 405246 words of font info for 33 fonts, out of 8000000 for 9000
+ 25463 multiletter control sequences out of 15000+600000
+ 405583 words of font info for 34 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 70i,5n,81p,361b,599s stack positions out of 5000i,500n,10000p,200000b,80000s
-<C:/Users/levyg/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/levyg/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb>
-Output written on main.pdf (11 pages, 45318 bytes).
+ 70i,5n,81p,385b,599s stack positions out of 5000i,500n,10000p,200000b,80000s
+ <C:\Users\levyg\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1200.pk><C:/Users/levyg/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/levyg/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb>
+Output written on main.pdf (11 pages, 46664 bytes).
 PDF statistics:
- 48 PDF objects out of 1000 (max. 8388607)
+ 53 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

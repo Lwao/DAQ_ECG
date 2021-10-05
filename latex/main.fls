@@ -1,6 +1,6 @@
-PWD c:\Users\levyg\Downloads\DAQ_ECG
+PWD c:\Users\levyg\Documents\MEGA\Repositories\DAQ_ECG\latex
 INPUT C:\Users\levyg\AppData\Local\MiKTeX\miktex\data\le\pdftex\pdflatex.fmt
-INPUT c:\Users\levyg\Downloads\DAQ_ECG\main.tex
+INPUT c:\Users\levyg\Documents\MEGA\Repositories\DAQ_ECG\latex\main.tex
 OUTPUT main.log
 INPUT C:\Users\levyg\AppData\Local\Programs\MiKTeX\tex\latex\base\article.cls
 INPUT C:\Users\levyg\AppData\Local\Programs\MiKTeX\tex\latex\base\article.cls
@@ -441,6 +441,7 @@ INPUT text\body\introducion.tex
 INPUT .\text\body\introducion.tex
 INPUT .\text\body\introducion.tex
 INPUT text\body\introducion.tex
+INPUT C:\Users\levyg\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\tcrm1200.tfm
 INPUT .\text\body\methodology.tex
 INPUT .\text\body\methodology.tex
 INPUT .\text\body\methodology.tex
@@ -475,6 +476,8 @@ INPUT text\pos\appendix.tex
 INPUT .\text\pos\appendix.tex
 INPUT text\pos\appendix.tex
 INPUT main.aux
+INPUT C:\Users\levyg\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\tcrm1200.pk
+INPUT C:\Users\levyg\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\tcrm1200.pk
 INPUT C:\Users\levyg\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmbx12.pfb
 INPUT C:\Users\levyg\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmbx12.pfb
 INPUT C:\Users\levyg\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmr12.pfb
