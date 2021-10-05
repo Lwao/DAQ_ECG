@@ -113,6 +113,8 @@ void vTaskOutputECG(void * pvParameters)
             {
                 time = esp_timer_get_time();
                 //printf("%d\n", outBuffer[i]);
+                dac_output_enable(DAC_CHANNEL_1);
+                dac_output_voltage(DAC_CHANNEL_1, outBuffer[i]);
                 while((esp_timer_get_time()-time) < (int32_t)(1e6*dt));
             }
             vTaskDelay(1);
@@ -167,6 +169,7 @@ void change_pathology()
         alpha[3] = 0.12;
         H = 1.52;
         gammat = 13;
+
         ESP_LOGI("change_pathology", "ATRIAL_FLUTTER");
     } else if(xEventGroupGetBits(xPathologies) & BIT_(ATRIAL_FLUTTER))
     {   
@@ -179,6 +182,7 @@ void change_pathology()
         alpha[3] = -0.1;
         H = 2.178;
         gammat = 21;
+
         ESP_LOGI("change_pathology", "VENTRICULAR_TACHYCARDIA");
     } else if(xEventGroupGetBits(xPathologies) & BIT_(VENTRICULAR_TACHYCARDIA))
     {
@@ -191,6 +195,7 @@ void change_pathology()
         alpha[3] = 0;
         H = 2.178;
         gammat = 13;
+
         ESP_LOGI("change_pathology", "VENTRICULAR_FLUTTER");
     } else if(xEventGroupGetBits(xPathologies) & BIT_(VENTRICULAR_FLUTTER))
     {
@@ -203,6 +208,7 @@ void change_pathology()
         alpha[3] = 0.12;
         H = 3;
         gammat = 7;
+
         ESP_LOGI("change_pathology", "NORMAL_RHYTHM");
     } else
     {
@@ -214,6 +220,7 @@ void change_pathology()
         alpha[3] = 0.12;
         H = 3;
         gammat = 7;
+
         ESP_LOGI("change_pathology", "NORMAL_RHYTHM");
     }
     prev_x[0] = 0;
