@@ -51,6 +51,7 @@ void app_main(void)
     }
 
     // set flag informing that the recording is stopped
+    xEventGroupSetBits(xPathologies, BIT_(NORMAL_RHYTHM));
     xEventGroupSetBits(xEvents, BIT_(ENABLE_ECG_GENERATION));
 
     ESP_LOGI("app_main", "Successful BOOT!");
@@ -70,6 +71,11 @@ void vTaskGenerateECG(void * pvParameters)
     {
         if(xEventGroupWaitBits(xEvents, BIT_(ENABLE_ECG_GENERATION), pdFALSE, pdTRUE, portMAX_DELAY) & BIT_(ENABLE_ECG_GENERATION))
         {
+            if(xEventGroupGetBits(xEvents) & BIT_(ENABLE_CHANGE_PATHOLOGY))
+            {
+                change_pathology();
+                xEventGroupClearBits(xEvents, BIT_(ENABLE_CHANGE_PATHOLOGY));
+            }
             for(i=0; i<BUFFER_LEN; i++)
             {
                 act_x[0] = gammat*(prev_x[0]-prev_x[1]-C*prev_x[0]*prev_x[1]-prev_x[0]*prev_x[1]*prev_x[1])*dt+prev_x[0];
@@ -106,7 +112,7 @@ void vTaskOutputECG(void * pvParameters)
             for(i=0; i<BUFFER_LEN; i++)
             {
                 time = esp_timer_get_time();
-                printf("%d\n", outBuffer[i]);
+                //printf("%d\n", outBuffer[i]);
                 while((esp_timer_get_time()-time) < (int32_t)(1e6*dt));
             }
             vTaskDelay(1);
@@ -124,7 +130,7 @@ void vTaskOutputECG(void * pvParameters)
 static void IRAM_ATTR ISR_BTN()
 {
     portENTER_CRITICAL_ISR(&spinlock);
-    change_pathology();
+    xEventGroupSetBits(xEvents, BIT_(ENABLE_CHANGE_PATHOLOGY));
     portEXIT_CRITICAL_ISR(&spinlock);
 }
 
@@ -148,6 +154,8 @@ void change_pathology()
         alpha[3] = 0;
         H = 2.848;
         gammat = 21;
+
+        ESP_LOGI("change_pathology", "SINUS_TACHYCARDIA");
     } else if(xEventGroupGetBits(xPathologies) & BIT_(SINUS_TACHYCARDIA))
     {
         xEventGroupClearBits(xPathologies, BIT_(SINUS_TACHYCARDIA));
@@ -159,6 +167,7 @@ void change_pathology()
         alpha[3] = 0.12;
         H = 1.52;
         gammat = 13;
+        ESP_LOGI("change_pathology", "ATRIAL_FLUTTER");
     } else if(xEventGroupGetBits(xPathologies) & BIT_(ATRIAL_FLUTTER))
     {   
         xEventGroupClearBits(xPathologies, BIT_(ATRIAL_FLUTTER));
@@ -170,6 +179,7 @@ void change_pathology()
         alpha[3] = -0.1;
         H = 2.178;
         gammat = 21;
+        ESP_LOGI("change_pathology", "VENTRICULAR_TACHYCARDIA");
     } else if(xEventGroupGetBits(xPathologies) & BIT_(VENTRICULAR_TACHYCARDIA))
     {
         xEventGroupClearBits(xPathologies, BIT_(VENTRICULAR_TACHYCARDIA));
@@ -181,6 +191,7 @@ void change_pathology()
         alpha[3] = 0;
         H = 2.178;
         gammat = 13;
+        ESP_LOGI("change_pathology", "VENTRICULAR_FLUTTER");
     } else if(xEventGroupGetBits(xPathologies) & BIT_(VENTRICULAR_FLUTTER))
     {
         xEventGroupClearBits(xPathologies, BIT_(VENTRICULAR_FLUTTER));
@@ -192,6 +203,7 @@ void change_pathology()
         alpha[3] = 0.12;
         H = 3;
         gammat = 7;
+        ESP_LOGI("change_pathology", "NORMAL_RHYTHM");
     } else
     {
         xEventGroupSetBits(xPathologies, BIT_(NORMAL_RHYTHM));
@@ -202,6 +214,7 @@ void change_pathology()
         alpha[3] = 0.12;
         H = 3;
         gammat = 7;
+        ESP_LOGI("change_pathology", "NORMAL_RHYTHM");
     }
     prev_x[0] = 0;
     prev_x[1] = 0;

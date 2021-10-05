@@ -63,7 +63,7 @@
 #define NUM_BUFFERS   30
 
 // gpio
-#define GPIO_INPUT_PIN_SEL1     (1ULL<<BTN_CHANGE_PATHOLOGY)  // | (1ULL<<ANOTHER_GPIO)
+#define GPIO_INPUT_PIN_SEL1 (1ULL<<BTN_CHANGE_PATHOLOGY)  // | (1ULL<<ANOTHER_GPIO)
 
 // event flags
 
@@ -75,7 +75,8 @@ enum pathologies{NORMAL_RHYTHM,
                 VENTRICULAR_TACHYCARDIA,
                 VENTRICULAR_FLUTTER};
 
-enum events{ENABLE_ECG_GENERATION};
+enum events{ENABLE_ECG_GENERATION,
+            ENABLE_CHANGE_PATHOLOGY};
 
 /*
  * Global variable declaration section
