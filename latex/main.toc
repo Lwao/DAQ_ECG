@@ -1,0 +1,7 @@
+\babel@toc {english}{}\relax 
+\contentsline {section}{\numberline {1}Introduction}{5}{}%
+\contentsline {section}{\numberline {2}Methodology}{6}{}%
+\contentsline {section}{\numberline {3}Results}{7}{}%
+\contentsline {section}{\numberline {4}Discussions}{8}{}%
+\contentsline {section}{\numberline {5}Conclusions}{9}{}%
+\contentsline {section}{\numberline {A}Schematics}{10}{}%

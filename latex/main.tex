@@ -1,0 +1,26 @@
+\documentclass[a4paper, 12pt]{article}
+
+
+\usepackage{graphicx}
+\usepackage{graphics}   
+\usepackage[utf8x]{inputenc}
+\usepackage{indentfirst}
+\usepackage{color}	
+\usepackage{natbib}
+\usepackage[english]{babel}	
+\usepackage{setspace}
+\usepackage{comment}
+\usepackage{listings}
+\usepackage{lipsum}
+\usepackage{mathtools}
+\usepackage{caption}
+
+\graphicspath{{images/}}        % Caminho das imagens
+\pagenumbering{arabic}          % Numeração das páginas
+\everymath{\displaystyle}       % \frac{}{} tamanho ideal
+
+\begin{document}
+    \input{text/pre.tex}
+    \input{text/body.tex}
+    \input{text/pos.tex}
+\end{document}
