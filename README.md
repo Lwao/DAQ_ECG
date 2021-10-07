@@ -1,5 +1,5 @@
-<object data="https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwiMgqK80rfzAhXuGLkGHbz2Bg4QFnoECAMQAQ&url=http%3A%2F%2Fole.uff.br%2Fwp-content%2Fuploads%2Fsites%2F419%2F2019%2F04%2FECG-Manual-Pr%25C3%25A1tico-de-Eletrocardiograma-HCor.pdf&usg=AOvVaw1Qclffp55PcfAZqaKyf_Yu" type="application/pdf" width="700px" height="700px">
-    <embed src="https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwiMgqK80rfzAhXuGLkGHbz2Bg4QFnoECAMQAQ&url=http%3A%2F%2Fole.uff.br%2Fwp-content%2Fuploads%2Fsites%2F419%2F2019%2F04%2FECG-Manual-Pr%25C3%25A1tico-de-Eletrocardiograma-HCor.pdf&usg=AOvVaw1Qclffp55PcfAZqaKyf_Yu">
-        <p>This browser does not support PDFs. Please download the PDF to view it: <a href="https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwiMgqK80rfzAhXuGLkGHbz2Bg4QFnoECAMQAQ&url=http%3A%2F%2Fole.uff.br%2Fwp-content%2Fuploads%2Fsites%2F419%2F2019%2F04%2FECG-Manual-Pr%25C3%25A1tico-de-Eletrocardiograma-HCor.pdf&usg=AOvVaw1Qclffp55PcfAZqaKyf_Yu">Download PDF</a>.</p>
+<object data="http://ole.uff.br/wp-content/uploads/sites/419/2019/04/ECG-Manual-Pr%C3%A1tico-de-Eletrocardiograma-HCor.pdf" type="application/pdf" width="700px" height="700px">
+    <embed src="http://ole.uff.br/wp-content/uploads/sites/419/2019/04/ECG-Manual-Pr%C3%A1tico-de-Eletrocardiograma-HCor.pdf">
+        <p>This browser does not support PDFs. Please download the PDF to view it: <a href="http://ole.uff.br/wp-content/uploads/sites/419/2019/04/ECG-Manual-Pr%C3%A1tico-de-Eletrocardiograma-HCor.pdf">Download PDF</a>.</p>
     </embed>
 </object>
