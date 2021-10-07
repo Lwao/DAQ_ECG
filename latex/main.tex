@@ -3,10 +3,9 @@
 
 \usepackage{graphicx}
 \usepackage{graphics}   
-\usepackage[utf8x]{inputenc}
+%\usepackage[utf8x]{inputenc}
 \usepackage{indentfirst}
 \usepackage{color}	
-\usepackage{natbib}
 \usepackage[english]{babel}	
 \usepackage{setspace}
 \usepackage{comment}
@@ -14,10 +13,17 @@
 \usepackage{lipsum}
 \usepackage{mathtools}
 \usepackage{caption}
+\usepackage{csquotes}
+\usepackage{hyperref}
+\usepackage[backend=biber,style=numeric,sorting=ynt]{biblatex}
 
 \graphicspath{{images/}}        % Caminho das imagens
 \pagenumbering{arabic}          % Numeração das páginas
 \everymath{\displaystyle}       % \frac{}{} tamanho ideal
+
+
+
+\addbibresource{bib.bib}
 
 \begin{document}
     \input{text/pre.tex}
