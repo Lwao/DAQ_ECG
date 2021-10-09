@@ -1,6 +1,10 @@
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
+
+# Plotly Express
+import plotly.express as px
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 def ecg_generator(dt=1e-4, t_end=1, pathology='normal rhythm'):
     t = np.arange(0,t_end+dt,dt)
@@ -29,6 +33,25 @@ def ecg_generator(dt=1e-4, t_end=1, pathology='normal rhythm'):
 #plt.plot(t, ecg)
 
 # read ECG signal
-#df = pd.read_csv('data_float.txt', names=['ecg']) # 32-bits float
-df = pd.read_csv('data_char.txt', names=['ecg']) # 8-bits int
-plt.plot(df['ecg'].iloc[0:10000])
+df1 = pd.read_csv('data_float.txt', names=['ecg']) # 32-bits float
+df2 = pd.read_csv('data_char.txt', names=['ecg']) # 8-bits int
+
+
+fig = make_subplots(rows=1, cols=2, shared_xaxes=False)
+fig.add_trace(
+    go.Scatter(y=df1['ecg'], name='ECG-software'),
+    row=1, col=1
+)
+fig.add_trace(
+    go.Scatter(y=df2['ecg'].iloc[1000:30000], name='ECG-hardware'),
+    row=1, col=2
+)
+fig.update_layout(height=400, width=700, title_text='ECG - Normal rhythm')
+fig.update_yaxes(title_text="", showgrid=True)
+fig.update_xaxes(title_text="", showgrid=True)
+
+fig['layout']['yaxis1']['title']='Amplitude'
+fig['layout']['xaxis1']['title']='Samples'
+fig['layout']['xaxis2']['title']='Samples'
+
+fig.show()

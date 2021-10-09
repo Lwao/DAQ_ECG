@@ -26,7 +26,7 @@ if(winIdx[-1]!=signalSize): winIdx = np.append(winIdx, signalSize-1)
 # Find peaks
 
 threPer = 0.9 # threshold percentage
-thre = 0.9*max(ecg) # threshold
+thre = threPer*max(ecg) # threshold
 #thre = 1.3*np.sqrt(np.mean(ecg**2))
 filt = ecg * (ecg>thre) # ecg data higher than threshold
 dfilt = np.int32(np.append(0,np.diff(filt))>0) # amplitude is rising 
