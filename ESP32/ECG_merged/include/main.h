@@ -121,6 +121,15 @@ float genBuffer[BUFFER_LEN];
 float dspBuffer[BUFFER_LEN];
 float txBuffer[BUFFER_LEN];
 
+float tempBuffer[BUFFER_LEN];
+
+float peak_count=0;
+float heart_rate;
+float lastFilt=0, lastDFilt=0, lastDDFilt=0;
+
+#define MOV_AVG_SIZE 16
+float AVG_KERNEL[MOV_AVG_SIZE]={0};
+
 // freertos variables
 TaskHandle_t xTaskSTARThandle; // handle to system chain to START
 TaskHandle_t xTaskENDhandle; // handle to system chain to END

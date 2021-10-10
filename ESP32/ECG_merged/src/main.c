@@ -61,6 +61,7 @@ void app_main(void)
 
     xEventGroupSetBits(xPathologies, BIT_(NORMAL_RHYTHM));
 
+
     ESP_LOGI(APP_MAIN_TAG, "Successful BOOT!");
     vTaskDelete(NULL);
 }
@@ -151,7 +152,7 @@ void vTaskGEN(void * pvParameters)
                 act_x[1] = gammat*(H*prev_x[0]-3*prev_x[1]+C*prev_x[0]*prev_x[1]+prev_x[0]*prev_x[1]*prev_x[1]+beta*(prev_x[3]-prev_x[1]))*dt+prev_x[1];
                 act_x[2] = gammat*(prev_x[2]-prev_x[3]-C*prev_x[2]*prev_x[3]-prev_x[2]*prev_x[3]*prev_x[3])*dt+prev_x[2];
                 act_x[3] = gammat*(H*prev_x[2]-3*prev_x[3]+C*prev_x[2]*prev_x[3]+prev_x[2]*prev_x[3]*prev_x[3]+2*beta*(prev_x[1]-prev_x[3]))*dt+prev_x[3];
-                genBuffer[i] = alpha[0]*act_x[0]+alpha[1]*act_x[1]+alpha[2]*act_x[2]+alpha[3]*act_x[3] + get_random(100);
+                genBuffer[i] = alpha[0]*act_x[0]+alpha[1]*act_x[1]+alpha[2]*act_x[2]+alpha[3]*act_x[3];// + get_random(100);
                 prev_x[0] = act_x[0];
                 prev_x[1] = act_x[1];
                 prev_x[2] = act_x[2];
@@ -166,7 +167,10 @@ void vTaskGEN(void * pvParameters)
 
 void vTaskDSP(void * pvParameters)
 {
-    //int i;
+    float thre=0.4;
+    int i;
+    float actualFilt, actualDFilt, actualDDFilt;
+    float HR_temp;
     while(1)
     {
         if(xEventGroupWaitBits(xEvents, BIT_(ENABLE_SIGNAL_PROCESSING), pdFALSE, pdTRUE, portMAX_DELAY) & BIT_(ENABLE_SIGNAL_PROCESSING))
@@ -174,6 +178,38 @@ void vTaskDSP(void * pvParameters)
             while(xQueueDataGEN!=NULL && xQueueReceive(xQueueDataGEN, &dspBuffer, 0)==pdTRUE)
             {
                 //ESP_LOGI(DSP_TAG, "Start DSP.");
+
+                for(i=0; i<BUFFER_LEN; i++)
+                {
+                    // MOVING AVERAGE FILTER
+                    AVG_KERNEL[i % MOV_AVG_SIZE] = dspBuffer[i];
+                    dspBuffer[i] = 0;
+                    for(int j=0; j<MOV_AVG_SIZE; j++){dspBuffer[i] += AVG_KERNEL[j]/MOV_AVG_SIZE;}
+
+                    // HEART RATE
+                    if(dspBuffer[i]>thre)
+                    {
+                        actualFilt = dspBuffer[i];
+                        actualDFilt = actualFilt-lastFilt;
+                        if(actualDFilt>0){actualDFilt=1;}
+                        else{actualDFilt=0;}
+                        actualDDFilt = actualDFilt-lastDFilt;
+                        if(actualDDFilt<0){actualDDFilt=1;}
+                        else{actualDDFilt=0;}
+
+                        if(actualDDFilt>lastDDFilt) // found peak, update heart rate
+                        {
+                            HR_temp = 60/(peak_count*dt);
+                            if ((~isnan(HR_temp)) && (~isinf(HR_temp))){heart_rate = HR_temp;}
+                            peak_count=0;
+                        } else{peak_count++;}
+
+                        lastFilt = actualFilt;
+                        lastDFilt = actualDFilt;
+                        lastDDFilt = actualDDFilt;
+                    } else{peak_count++;}
+                }
+                
                 // enqueue data for next task
                 xQueueSend(xQueueDataDSP,&dspBuffer,portMAX_DELAY);
                 //ESP_LOGI(DSP_TAG, "End DSP.");
@@ -195,7 +231,8 @@ void vTaskTX(void * pvParameters)
                 //ESP_LOGI(TX_TAG, "Start TX.");
                 for(i=0; i<BUFFER_LEN; i++)
                 {
-                    printf("%f\n", txBuffer[i]);
+                    printf("%f\t%f\n", txBuffer[i], heart_rate);
+                    //printf("%f\n", heart_rate);
                 }
                 vTaskDelay(1);
             }            
