@@ -35,6 +35,7 @@
     #include "driver/gpio.h"
     #include "driver/periph_ctrl.h"
     #include "driver/adc.h"
+    #include "driver/uart.h"
     #include "esp_adc_cal.h"
 #endif //DRIVERS_INCLUDED
 
@@ -66,7 +67,7 @@
 
 // buffers
 #define BUFFER_LEN    1024
-#define NUM_BUFFERS   30
+#define NUM_BUFFERS   10
 
 // gpio
 #define GPIO_INPUT_PIN_SEL1 (1ULL<<BTN_ON_OFF)  // | (1ULL<<ANOTHER_GPIO)
@@ -83,7 +84,7 @@ enum events{SYSTEM_STARTED,
             BTN_OFF_TASK};
 
 // system macros
-#define SAMPLING_TIME 1e-4
+#define SAMPLING_TIME 0.002 // 500 Hz
 
 // log flags
 #define APP_MAIN_TAG "app_main"
@@ -108,14 +109,25 @@ gpio_config_t in_conf = {
     .pull_up_en   = 0,                   // disable pull-up mode
 };
 
+/*
+uart_config_t uart_config = {
+    .baud_rate = 115200,
+    .data_bits = UART_DATA_8_BITS,
+    .parity = UART_PARITY_DISABLE,
+    .stop_bits = UART_STOP_BITS_1,
+    .flow_ctrl = UART_HW_FLOWCTRL_CTS_RTS,
+    .rx_flow_ctrl_thresh = 122,
+};
+*/
+
 // adc variables
 static esp_adc_cal_characteristics_t *adc_chars; 
 static esp_adc_cal_value_t val_type;
 
 // buffers
-float adcBuffer[BUFFER_LEN];
-float dspBuffer[BUFFER_LEN];
-float txBuffer[BUFFER_LEN];
+uint16_t adcBuffer[BUFFER_LEN];
+uint16_t dspBuffer[BUFFER_LEN];
+uint16_t txBuffer[BUFFER_LEN];
 
 // freertos variables
 TaskHandle_t xTaskSTARThandle; // handle to system chain to START
@@ -179,5 +191,5 @@ void vTaskTX(void * pvParameters);
 static void IRAM_ATTR ISR_BTN();
 
 void check_efuse(void);
-void timer_config(int timer_idx, bool auto_reload, double tim
+void timer_config(int timer_idx, bool auto_reload, double timer_interval_sec);
 #endif //_MAIN_H_
