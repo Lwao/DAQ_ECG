@@ -3,7 +3,7 @@
  * @brief 
  *
  * @author Levy Gabriel da S. G.
- * @date October 9 2021
+ * @date October 10 2021
  */
 
 #ifndef _MAIN_H_ 
@@ -22,6 +22,7 @@
     #include <string.h>
     #include <sys/unistd.h>
     #include <sys/stat.h>
+    #include <math.h>
 #endif //C_POSIX_LIB_INCLUDED
 
 #ifndef ESP_MANAGEMENT_LIBS_INCLUDED
@@ -34,16 +35,7 @@
     #define DRIVERS_INCLUDED
     #include "driver/gpio.h"
     #include "driver/periph_ctrl.h"
-    #include "driver/adc.h"
-    #include "driver/uart.h"
-    #include "esp_adc_cal.h"
 #endif //DRIVERS_INCLUDED
-
-#ifndef ADC_LIB_INCLUDED
-#define ADC_LIB_INCLUDED
-#include <driver/adc.h>
-#include "esp_adc_cal.h"
-#endif
 
 #ifndef FREERTOS_LIB_INCLUDED
     #define FREERTOS_LIB_INCLUDED
@@ -76,21 +68,25 @@
 
 #define BIT_(shift) (1<<shift)
 
+enum pathologies{NORMAL_RHYTHM, 
+                SINUS_TACHYCARDIA,
+                ATRIAL_FLUTTER,
+                VENTRICULAR_TACHYCARDIA,
+                VENTRICULAR_FLUTTER};
+
 enum events{SYSTEM_STARTED,
-            ENABLE_ADC_READING,
+            ENABLE_ECG_GENERATION,
             ENABLE_SIGNAL_PROCESSING,
             ENABLE_TRANSMISSION,
             BTN_ON_TASK,
-            BTN_OFF_TASK};
-
-// system macros
-#define SAMPLING_TIME 0.002 // 500 Hz
+            BTN_OFF_TASK,
+            ENABLE_CHANGE_PATHOLOGY};
 
 // log flags
 #define APP_MAIN_TAG "app_main"
 #define START_TAG    "start_task"
 #define END_TAG      "end_task"
-#define ADC_TAG      "adc_task"
+#define GEN_TAG      "gen_task"
 #define DSP_TAG      "dsp_task"
 #define TX_TAG       "tx_task"
 
@@ -109,35 +105,32 @@ gpio_config_t in_conf = {
     .pull_up_en   = 0,                   // disable pull-up mode
 };
 
-/*
-uart_config_t uart_config = {
-    .baud_rate = 115200,
-    .data_bits = UART_DATA_8_BITS,
-    .parity = UART_PARITY_DISABLE,
-    .stop_bits = UART_STOP_BITS_1,
-    .flow_ctrl = UART_HW_FLOWCTRL_CTS_RTS,
-    .rx_flow_ctrl_thresh = 122,
-};
-*/
+// configuration
+float prev_x[4] = {0,0,0.1,0}; // previous x vector
+float act_x[4]; // actual x vector
+float dt=1e-3; // sampling period
 
-// adc variables
-static esp_adc_cal_characteristics_t *adc_chars; 
-static esp_adc_cal_value_t val_type;
+// variables initialized to NORMAL_RHYTHM
+const float C=1.35, beta=4;
+float alpha[4] = {-0.024, 0.0216, -0.0012, 0.12};
+float H=3, gammat=7;
+float ecg;
 
 // buffers
-int adcBuffer[BUFFER_LEN];
-int dspBuffer[BUFFER_LEN];
-int txBuffer[BUFFER_LEN];
+float genBuffer[BUFFER_LEN];
+float dspBuffer[BUFFER_LEN];
+float txBuffer[BUFFER_LEN];
 
 // freertos variables
 TaskHandle_t xTaskSTARThandle; // handle to system chain to START
 TaskHandle_t xTaskENDhandle; // handle to system chain to END
-TaskHandle_t xTaskADChandle; // handle to ADC reading task
+TaskHandle_t xTaskGENhandle; // handle to ADC reading task
 TaskHandle_t xTaskDSPhandle; // handle to digital signal processing task
 TaskHandle_t xTaskTXhandle; // handle to data transmission task
 TaskHandle_t xTaskOUThandle; // handle to ECG output task
-QueueHandle_t xQueueDataADC; // data queue to store data read by ADC to be processed in DSP
+QueueHandle_t xQueueDataGEN; // data queue to store data read by ADC to be processed in DSP
 QueueHandle_t xQueueDataDSP; // data queue to store data read processed by DSP to be send to TX
+EventGroupHandle_t xPathologies; // event group to signalize which pathology must be simulated
 EventGroupHandle_t xEvents; // event group to manage tasks context
 
 portMUX_TYPE spinlock = portMUX_INITIALIZER_UNLOCKED;
@@ -147,6 +140,18 @@ portMUX_TYPE spinlock = portMUX_INITIALIZER_UNLOCKED;
  * --------------------
  * Initialize functions prototypes to later be defined
  */
+
+/**
+ * @brief Function responsible to change parameters in ECG signal generation so multiple pathologies can be simulated
+ */
+void change_pathology();
+
+/**
+ * @brief Function that returns true random number as a float and scaled down
+ * 
+ * @param scaleFactor scale factor to reduce amplitude of random number 
+ */
+float get_random(float scaleFactor);
 
 /**
  * @brief Task to configure START of recording when receives command to it.
@@ -163,11 +168,11 @@ void vTaskSTART(void * pvParameters);
 void vTaskEND(void * pvParameters);
 
 /**
- * @brief Task to read ECG data in analog domain via ADC.
+ * @brief Task to generate ECG data for simulation.
  *
  * @param pvParameters freeRTOS task parameters
  */
-void vTaskADC(void * pvParameters);
+void vTaskGEN(void * pvParameters);
 
 /**
  * @brief Task to apply digital signal processing algorithms to the incoming ECG, such as heart rate acquisition,
@@ -190,6 +195,4 @@ void vTaskTX(void * pvParameters);
  */
 static void IRAM_ATTR ISR_BTN();
 
-void check_efuse(void);
-void timer_config(int timer_idx, bool auto_reload, double timer_interval_sec);
 #endif //_MAIN_H_
