@@ -1,0 +1,29 @@
+\begin{comment}
+This type of band-pass filter is known as a multiple feedback band-pass active filter, since uses the feedback by a resistor and capacitor and uses opamps. Also this circuit has better frequency response and adjustable quality factor (Q) and it has multiples equations to set the design requirements. The first one is the maximum gain inside the feedback loop, which is given by the equation \ref{band:2}.
+
+\begin{center}
+\begin{equation} \label{band:2}
+    \text{max. gain} = A_v = - \frac{R_{B2}}{2R_{1B}} = -2Q^2
+\end{equation}
+\end{center}
+
+The desired maximum gains is the unit, considering the non necessity of another amplification segment. So the quality factor is found to be $0.707$. This value can be used to found the resistances of $R_{1B}$ and $R_{2B}$ by the equation \ref{band:3}, where $f_R$ is the resonance frequency given by the geometric mean between the lower ($f_L = 0.05 \, Hz$) and upper ($f_H = 200 \, Hz$) cutoff frequency, so $f_R = \sqrt{f_L \times f_H} = 3.16 \, Hz$.
+
+\begin{center}
+\begin{equation} \label{band:3}
+    |Q| = \frac{1}{2} \sqrt{\frac{R_{2B}}{R_{1B}}} = \frac{f_R}{B_W}
+\end{equation}
+\end{center}
+\subsection{ECG simulator}
+
+Applying the previous equation \ref{band:3} it can be found a relation between the resistor of $\frac{R_{2B}}{R_{1B}} = 2$. But before to determine the values for the resistors, it is better choose the capacitance for both the capacitors with the equation \ref{band:4}, since resistors are more easy to associate. 
+
+\begin{center}
+\begin{equation} \label{band:4}
+    f_R = \frac{1}{2\pi C_B \sqrt{R_{1B}R_{2B}}}
+\end{equation}
+\end{center}
+
+So the capacitance can be set to $1 \, uF$ and the resistors can be found with the help of equation \ref{band:4} given approximated values of $R_{1B} = 36 \, k\Omega$ and $R_{2B} = 75 \, k\Omega$ (values of resistance approximated to commercial values).
+
+\end{comment}
