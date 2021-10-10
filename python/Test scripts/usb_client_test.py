@@ -16,9 +16,7 @@ def animateFunc(i):
         ax.set_xlabel('Samples')
         ax.set_ylabel('Amplitude')
         ax.set_title('Real-time ECG')
-        ax.set_ylim(0,3300)
-
-
+        ax.set_ylim(-1,1)
 
 ser = serial.Serial(port='COM3', 
                     baudrate=115200, 
@@ -30,21 +28,19 @@ sizeDeque = sizeWin * 4
 buffer = []
 data_deque = collections.deque(np.zeros(sizeDeque)) # zero filled collection
 fig, ax = plt.subplots(figsize=(10,4)) # config matplot figure
-#ani = FuncAnimation(fig, animateFunc, interval=1) # animate
+ani = FuncAnimation(fig, animateFunc, interval=1000) # animate
 #plt.show() # display
 
 while True:
+    
     try:
-        bytesToRead = ser.inWaiting()
-        ser_bytes = ser.read(bytesToRead)
+        #bytesToRead = ser.inWaiting()
+        #ser_bytes = ser.read(bytesToRead)
+        ser_bytes = ser.readline()
         try:
             decoded_bytes = float(ser_bytes[0:len(ser_bytes)-2].decode("utf-8"))
             buffer.append(decoded_bytes)
-            #print(decoded_bytes)
-            #print(np.array(buffer))
-            #plt.plot(buffer)
             if(len(buffer)==sizeWin):
-               #plt.show() # display
                buffer = []
         except:
             continue
